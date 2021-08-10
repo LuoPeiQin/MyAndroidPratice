@@ -1,2 +1,3 @@
 rootProject.name = "MyPratice"
 include ':app'
+include ':javalib'
