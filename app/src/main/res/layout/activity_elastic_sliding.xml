@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_scroller_sliding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Scroller"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_animator_sliding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="动画" />
+
+        <Button
+            android:id="@+id/btn_animator_scroll_to_sliding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="动画s-to" />
+
+        <Button
+            android:id="@+id/btn_delay_sliding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="延时" />
+    </LinearLayout>
+
+    <com.stark.mypratice.viewevent.elastic_sliding.LinearLayoutScroller
+        android:id="@+id/lls_scroller"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:text="内容" />
+    </com.stark.mypratice.viewevent.elastic_sliding.LinearLayoutScroller>
+
+    <com.stark.mypratice.viewevent.elastic_sliding.LinearLayoutAnimator
+        android:layout_marginTop="10dp"
+        android:id="@+id/lla_animator"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:text="内容" />
+    </com.stark.mypratice.viewevent.elastic_sliding.LinearLayoutAnimator>
+
+    <com.stark.mypratice.viewevent.elastic_sliding.LinearLayoutDelay
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/lld_delay"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:text="内容" />
+    </com.stark.mypratice.viewevent.elastic_sliding.LinearLayoutDelay>
+</LinearLayout>

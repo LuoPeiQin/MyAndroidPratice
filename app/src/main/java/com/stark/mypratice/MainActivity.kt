@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.stark.mypratice.ipcdemo.IPCDemoActivity
+import com.stark.mypratice.viewevent.ViewEventActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,5 +19,9 @@ class MainActivity : AppCompatActivity() {
 
     fun ipcDemoActivity(view: View) {
         startActivity(Intent(this, IPCDemoActivity::class.java))
+    }
+
+    fun viewEventActivity(view: View) {
+        startActivity(Intent(this, ViewEventActivity::class.java))
     }
 }

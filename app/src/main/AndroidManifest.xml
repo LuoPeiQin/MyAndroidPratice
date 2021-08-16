@@ -40,6 +40,15 @@
             android:exported="false"
             android:process=":binderPoolService"></service>
 
+        // View Event Demo
+        <activity android:name=".viewevent.ViewEventActivity" />
+        <activity android:name=".viewevent.ViewSlideActivity" />
+        <activity android:name=".viewevent.ThreeWaySlideActivity" />
+        <activity android:name=".viewevent.ElasticSlidingActivity" />
+        <activity android:name=".viewevent.CustomViewActivity" />
+        <activity android:name=".viewevent.HorizontalScrollViewActivity"></activity>
+        <activity android:name=".viewevent.HorizontalScrollView2Activity"></activity>
+
     </application>
 
 </manifest>
