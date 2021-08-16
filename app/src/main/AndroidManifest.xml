@@ -17,6 +17,29 @@
             </intent-filter>
         </activity>
         <activity android:name=".AlgorithmActivity"/>
+
+        // IPC Demo
+        <service
+            android:name=".ipcdemo.ServiceInMain"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".ipcdemo.ServiceInProcess"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":serviceInProcess" />
+
+        <activity android:name=".ipcdemo.ServiceInProcessActivity" />
+        <activity android:name=".ipcdemo.BinderPoolActivity" />
+        <activity android:name=".ipcdemo.ServiceInMainActivity" />
+        <activity android:name=".ipcdemo.IPCDemoActivity" />
+
+        <service
+            android:name=".ipcdemo.BinderPoolService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":binderPoolService"></service>
+
     </application>
 
 </manifest>
