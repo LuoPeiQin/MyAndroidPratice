@@ -1,5 +1,7 @@
 package com.stark.javalib.generic;
 
+import com.stark.javalib.generic.eat.Food;
+
 /**
  * @ProjectName: MyPratice
  * @Package: com.stark.javalib.generic

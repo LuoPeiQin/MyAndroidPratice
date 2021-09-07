@@ -5,7 +5,7 @@
  * Date: 2021/9/4 10:09
  * Description: 用一句话描述下
  */
-package com.stark.javalib.generic;
+package com.stark.javalib.generic.eat;
 
 /**
  * @ProjectName: MyPratice

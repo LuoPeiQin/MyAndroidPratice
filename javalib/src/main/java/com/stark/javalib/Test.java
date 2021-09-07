@@ -15,11 +15,12 @@ package com.stark.javalib;
  * @Author: lpq
  * @CreateDate: 2021/8/12 11:54
  */
-public class Test {
+public class Test<T> {
     public static void main(String[] args) {
         int years = 5;
         double grow = 1.5;
         double result = Math.pow(grow, years);
         System.out.println("result = " + result);
     }
+
 }
