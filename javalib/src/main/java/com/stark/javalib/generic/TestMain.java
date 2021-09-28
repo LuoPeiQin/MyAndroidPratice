@@ -34,7 +34,5 @@ import java.util.ArrayList;
 public class TestMain {
     public static void main(String[] args) {
         // 泛型擦除
-        Meat<*> meat = new Meat<String>();
-
     }
 }
