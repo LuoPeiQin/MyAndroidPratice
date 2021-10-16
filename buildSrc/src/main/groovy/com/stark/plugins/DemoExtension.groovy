@@ -9,7 +9,7 @@ package com.stark.plugins;
 
 /**
  * @ProjectName: MyPratice
- * @Package: com.stark.plugins
+ * @Package: com.stark.com.stark.plugins
  * @ClassName: DemoExtension
  * @Description: 用一句话描述下
  * @Author: lpq

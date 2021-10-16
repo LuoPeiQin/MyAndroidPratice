@@ -5,17 +5,15 @@
  * Date: 2021/10/16 14:19
  * Description: 用一句话描述下
  */
-package com.stark.plugins;
+package com.stark.plugins
 
-import com.android.build.gradle.BaseExtension;
-
-import org.gradle.api.Action;
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
+import com.android.build.gradle.BaseExtension
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
 /**
  * @ProjectName: MyPratice
- * @Package: com.stark.plugins
+ * @Package: com.stark.com.stark.plugins
  * @ClassName: DemoPlugin
  * @Description: 用一句话描述下
  * @Author: lpq
@@ -23,10 +21,11 @@ import org.gradle.api.Project;
  */
 public class DemoPlugin implements Plugin<Project> {
     @Override
-    public void apply(Project project) {
+    public void apply(Project target) {
         // Transform执行测试
-        BaseExtension baseExtension = project.getExtensions().getByType(BaseExtension.class);
-        baseExtension.registerTransform(new DemoTransform());
+        target.android.registerTransform(new DemoTransform(target))
+//        BaseExtension baseExtension = project.getExtensions().getByType(BaseExtension.class);
+//        baseExtension.registerTransform(DemoTransform(project));
 
         // 扩展执行测试
 //        System.out.println("apply 执行1");
