@@ -1,3 +1,8 @@
+println("gradle 执行1")
 rootProject.name = "MyPratice"
+println("gradle 执行2")
 include ':app'
+println("gradle 执行3")
 include ':javalib'
+
+println("gradle 执行4")

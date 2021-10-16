@@ -8,7 +8,7 @@ class MyPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        def extension = project.extensions.create("strName", Extension)
+        def extension = project.extensions.create("inputName", Extension)
         project.afterEvaluate {
             // 文件加载完后执行
             println("Hello ${extension.myName}")
@@ -21,13 +21,22 @@ class Extension {
     def myName = "Mr.Luo"
 }
 
-// 加载插件
-apply plugin: MyPlugin
+println("app 执行1")
 
-// 加载扩展
-strName {
-    myName "jiang"
+// 加载插件
+apply plugin: "DemoPlugin"
+//apply plugin: MyPlugin
+
+println("app 执行2")
+
+inputName {
+    // Groovy 代码写法
+//    myName "jiang"
+    // java 代码写法
+    myName = "jiang & luo"
 }
+
+println("app 执行3")
 
 android {
     compileSdkVersion 30
