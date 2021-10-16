@@ -7,6 +7,8 @@
  */
 package com.stark.plugins;
 
+import com.android.build.gradle.BaseExtension;
+
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -22,17 +24,22 @@ import org.gradle.api.Project;
 public class DemoPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
-        System.out.println("apply 执行1");
-        final DemoExtension extension = project.getExtensions().create("inputName", DemoExtension.class);
-        System.out.println("apply 执行2");
-        project.afterEvaluate(new Action<Project>() {
-            @Override
-            public void execute(Project project) {
-                System.out.println("apply 执行3");
-                System.out.println("Hello " + extension.myName);
-            }
-        });
-        System.out.println("apply 执行4");
+        // Transform执行测试
+        BaseExtension baseExtension = project.getExtensions().getByType(BaseExtension.class);
+        baseExtension.registerTransform(new DemoTransform());
+
+        // 扩展执行测试
+//        System.out.println("apply 执行1");
+//        final DemoExtension extension = project.getExtensions().create("inputName", DemoExtension.class);
+//        System.out.println("apply 执行2");
+//        project.afterEvaluate(new Action<Project>() {
+//            @Override
+//            public void execute(Project project) {
+//                System.out.println("apply 执行3");
+//                System.out.println("Hello " + extension.myName);
+//            }
+//        });
+//        System.out.println("apply 执行4");
 
     }
 }

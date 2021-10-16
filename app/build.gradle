@@ -29,12 +29,12 @@ apply plugin: "DemoPlugin"
 
 println("app 执行2")
 
-inputName {
-    // Groovy 代码写法
-//    myName "jiang"
-    // java 代码写法
-    myName = "jiang & luo"
-}
+//inputName {
+//    // Groovy 代码写法
+////    myName "jiang"
+//    // java 代码写法
+//    myName = "jiang & luo"
+//}
 
 println("app 执行3")
 
