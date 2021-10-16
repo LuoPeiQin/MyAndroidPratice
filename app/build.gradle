@@ -3,6 +3,32 @@ plugins {
     id 'kotlin-android'
 }
 
+// 定义一个自定义插件
+class MyPlugin implements Plugin<Project> {
+
+    @Override
+    void apply(Project project) {
+        def extension = project.extensions.create("strName", Extension)
+        project.afterEvaluate {
+            // 文件加载完后执行
+            println("Hello ${extension.myName}")
+        }
+    }
+}
+
+// 定义一个扩展
+class Extension {
+    def myName = "Mr.Luo"
+}
+
+// 加载插件
+apply plugin: MyPlugin
+
+// 加载扩展
+strName {
+    myName "jiang"
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
