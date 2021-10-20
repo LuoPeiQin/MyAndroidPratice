@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.stark.mypratice">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,16 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPratice">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".DrawActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlgorithmActivity"/>
+        <activity android:name=".MainActivity">
 
-        // IPC Demo
+        </activity>
+        <activity android:name=".AlgorithmActivity" />
+
         <service
             android:name=".ipcdemo.ServiceInMain"
             android:enabled="true"
@@ -40,17 +43,15 @@
             android:name=".ipcdemo.BinderPoolService"
             android:enabled="true"
             android:exported="false"
-            android:process=":binderPoolService"></service>
+            android:process=":binderPoolService" />
 
-        // View Event Demo
         <activity android:name=".viewevent.ViewEventActivity" />
         <activity android:name=".viewevent.ViewSlideActivity" />
         <activity android:name=".viewevent.ThreeWaySlideActivity" />
         <activity android:name=".viewevent.ElasticSlidingActivity" />
         <activity android:name=".viewevent.CustomViewActivity" />
-        <activity android:name=".viewevent.HorizontalScrollViewActivity"></activity>
-        <activity android:name=".viewevent.HorizontalScrollView2Activity"></activity>
-
+        <activity android:name=".viewevent.HorizontalScrollViewActivity" />
+        <activity android:name=".viewevent.HorizontalScrollView2Activity" />
     </application>
 
 </manifest>
