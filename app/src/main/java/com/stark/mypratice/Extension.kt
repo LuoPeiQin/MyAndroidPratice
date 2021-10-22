@@ -19,6 +19,8 @@ import android.util.TypedValue.COMPLEX_UNIT_DIP
  * @Author: lpq
  * @CreateDate: 2021/10/20 20:06
  */
-fun Float.dx(): Float {
-    return TypedValue.applyDimension(COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
-}
+val Float.dp
+    get() = TypedValue.applyDimension(COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
+
+val Int.dp
+    get() = this.toFloat().dp

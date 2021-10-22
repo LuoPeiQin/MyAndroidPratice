@@ -13,7 +13,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.stark.mypratice.dx
+import com.stark.mypratice.dp
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -29,8 +29,8 @@ class PieView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     val ANGLES = arrayOf(60f, 150f, 90f, 60f)
     val COLORS = arrayListOf(Color.BLUE, Color.CYAN, Color.DKGRAY, Color.GREEN)
 
-    private val RADIUS = 100f.dx()
-    private val OFFSET = 10f.dx()
+    private val RADIUS = 100.dp
+    private val OFFSET = 10.dp
 
     val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 

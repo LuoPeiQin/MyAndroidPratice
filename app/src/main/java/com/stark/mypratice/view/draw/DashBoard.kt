@@ -12,7 +12,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import com.stark.mypratice.dx
+import com.stark.mypratice.dp
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -30,7 +30,7 @@ class DashBoard(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private val ANGLE = 120f
     val startAngle = ANGLE / 2 + 90f
     val sweepAngle = 360 - ANGLE
-    private val RADIUS = 100f.dx()
+    private val RADIUS = 100.dp
     private val POINTER_LENGTH = RADIUS * 0.7
     private var centerX = 0f
     private var centerY = 0f
@@ -42,7 +42,7 @@ class DashBoard(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     lateinit var pathDashPathEffect: PathDashPathEffect
     init {
         mPaint.style = Paint.Style.STROKE
-        mPaint.strokeWidth = 3f.dx()
+        mPaint.strokeWidth = 3.dp
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -50,9 +50,9 @@ class DashBoard(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         centerY = height / 2f
         path.addArc(centerX - RADIUS, centerY - RADIUS, centerX + RADIUS, centerY + RADIUS, startAngle, sweepAngle)
         pathMeasure.setPath(path, false)
-        val advance = (pathMeasure.length - 2f.dx()) / SPACE_NUMBER
+        val advance = (pathMeasure.length - 2.dp) / SPACE_NUMBER
         val phase = 0f
-        pathDash.addRect(0f, 0f, 2f.dx(), 5f.dx(), Path.Direction.CCW)
+        pathDash.addRect(0f, 0f, 2.dp, 5.dp, Path.Direction.CCW)
         pathDashPathEffect = PathDashPathEffect(pathDash, advance, phase, PathDashPathEffect.Style.ROTATE)
 
     }
