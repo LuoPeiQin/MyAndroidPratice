@@ -24,7 +24,7 @@ class Extension {
 println("app 执行1")
 
 // 加载插件
-apply plugin: "DemoPlugin"
+//apply plugin: "DemoPlugin"
 //apply plugin: MyPlugin
 
 println("app 执行2")
