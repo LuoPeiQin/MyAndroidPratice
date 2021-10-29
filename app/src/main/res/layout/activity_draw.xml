@@ -6,30 +6,51 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.stark.mypratice.view.draw.MaterialEditText
-        android:id="@+id/view_1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:hint="UserName"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-<!--    <com.stark.mypratice.view.draw.PointView-->
-<!--        android:id="@+id/view_2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1" />-->
+        <com.stark.mypratice.view.layout.SquareView
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:src="@drawable/avatar_rengwuxian" />
 
-<!--    <com.stark.mypratice.view.draw.CameraView-->
-<!--        android:id="@+id/view_3"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="2" />-->
+        <View
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:background="@color/colorAccent" />
+    </LinearLayout>
 
-<!--    <com.stark.mypratice.view.draw.ContentTextView-->
-<!--        android:id="@+id/view_4"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.stark.mypratice.view.layout.CircleView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@color/colorAccent" />
+    </LinearLayout>
+
+
+    <!--    <com.stark.mypratice.view.draw.PointView-->
+    <!--        android:id="@+id/view_2"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="1" />-->
+
+    <!--    <com.stark.mypratice.view.draw.CameraView-->
+    <!--        android:id="@+id/view_3"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="2" />-->
+
+    <!--    <com.stark.mypratice.view.draw.ContentTextView-->
+    <!--        android:id="@+id/view_4"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="1" />-->
 
 </LinearLayout>
