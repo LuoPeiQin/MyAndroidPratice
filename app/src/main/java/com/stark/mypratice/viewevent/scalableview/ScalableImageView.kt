@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -50,6 +51,8 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     private var smallScale = 0f
     private var bigScale = 0f
     private var isBig = false
+    private var offsetX = 0f
+    private var offsetY = 0f
     private val gestureDetectorCompat = GestureDetectorCompat(context, this).apply {
         setOnDoubleTapListener(this@ScalableImageView)
     }
@@ -82,6 +85,7 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     }
 
     override fun onDraw(canvas: Canvas) {
+        canvas.translate(offsetX, offsetY)
         val scale = smallScale + (bigScale - smallScale) * fractionScale
         canvas.scale(scale, scale, width / 2f, height / 2f)
         canvas.drawBitmap(
@@ -136,6 +140,11 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         distanceX: Float,
         distanceY: Float
     ): Boolean {
+        if (isBig) {
+            offsetX -= distanceX
+            offsetY -= distanceY
+            invalidate()
+        }
         return false
     }
 
