@@ -59,7 +59,7 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
             invalidate()
         }
 
-    private var objectAnimator = ObjectAnimator.ofFloat(this, "fractionScale", 0f, 1f)
+    private var scaleAnimator = ObjectAnimator.ofFloat(this, "fractionScale", 0f, 1f)
 
     init {
         IMAGE_HEIGHT = bitmap.height.toFloat()
@@ -82,7 +82,7 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     }
 
     override fun onDraw(canvas: Canvas) {
-        val scale = if (isBig) bigScale else smallScale
+        val scale = smallScale + (bigScale - smallScale) * fractionScale
         canvas.scale(scale, scale, width / 2f, height / 2f)
         canvas.drawBitmap(
             bitmap,
@@ -170,7 +170,11 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
      */
     override fun onDoubleTap(e: MotionEvent?): Boolean {
         isBig = !isBig
-        invalidate()
+        if (isBig) {
+            scaleAnimator.start()
+        } else {
+            scaleAnimator.reverse()
+        }
         return false
     }
 
