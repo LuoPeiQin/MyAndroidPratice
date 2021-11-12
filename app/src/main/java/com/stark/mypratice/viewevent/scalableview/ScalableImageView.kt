@@ -21,6 +21,8 @@ import android.view.View
 import androidx.core.view.GestureDetectorCompat
 import com.stark.mypratice.R
 import com.stark.mypratice.dp
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  *
@@ -50,9 +52,12 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var smallScale = 0f
     private var bigScale = 0f
+    private var scaleModulus = 1.5f
     private var isBig = false
     private var offsetX = 0f
     private var offsetY = 0f
+    private var maxOffsetX = 0f
+    private var maxOffsetY = 0f
     private val gestureDetectorCompat = GestureDetectorCompat(context, this).apply {
         setOnDoubleTapListener(this@ScalableImageView)
     }
@@ -82,11 +87,13 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
             smallScale = h / IMAGE_HEIGHT
             bigScale = w / IMAGE_WIDTH
         }
+        maxOffsetX = ((IMAGE_WIDTH * bigScale) * scaleModulus - w)/2
+        maxOffsetY = ((IMAGE_WIDTH * bigScale) * scaleModulus - h)/2
     }
 
     override fun onDraw(canvas: Canvas) {
         canvas.translate(offsetX, offsetY)
-        val scale = smallScale + (bigScale - smallScale) * fractionScale
+        val scale = smallScale + (bigScale * scaleModulus - smallScale) * fractionScale
         canvas.scale(scale, scale, width / 2f, height / 2f)
         canvas.drawBitmap(
             bitmap,
@@ -143,6 +150,10 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         if (isBig) {
             offsetX -= distanceX
             offsetY -= distanceY
+            offsetX = min(offsetX, maxOffsetX)
+            offsetX = max(offsetX, -maxOffsetX)
+            offsetY = min(offsetY, maxOffsetY)
+            offsetY = max(offsetY, -maxOffsetY)
             invalidate()
         }
         return false
