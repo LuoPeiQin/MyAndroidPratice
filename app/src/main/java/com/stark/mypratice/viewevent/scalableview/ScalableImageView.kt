@@ -17,6 +17,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.OverScroller
 import androidx.core.view.GestureDetectorCompat
@@ -47,8 +48,7 @@ import kotlin.math.min
 private val IMAGE_WIDTH = 200.dp
 private var IMAGE_HEIGHT = 200.dp
 
-class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs),
-    GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs){
     private val bitmap = getBitmap(IMAGE_WIDTH.toInt())
     private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var smallScale = 0f
@@ -59,9 +59,10 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     private var originOffsetY = 0f
     private var maxOffsetX = 0f
     private var maxOffsetY = 0f
-    private val gestureDetectorCompat = GestureDetectorCompat(context, this).apply {
-        setOnDoubleTapListener(this@ScalableImageView)
-    }
+    private val simpleListener = SimpleListener()
+    private val gestureDetectorCompat = GestureDetectorCompat(context, simpleListener)
+    private val simpleScaleListener = SimpleScaleListener()
+    private val scaleGestureDetector = ScaleGestureDetector(context, simpleScaleListener)
     private var fractionScale = 0f
         set(value) {
             field = value
@@ -76,7 +77,7 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 //        return super.onTouchEvent(event)
-        return gestureDetectorCompat.onTouchEvent(event)
+        return scaleGestureDetector.onTouchEvent(event)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -107,6 +108,163 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         )
     }
 
+    /**
+     * 监听双指操作
+     */
+    inner class SimpleScaleListener : ScaleGestureDetector.OnScaleGestureListener {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+//            originOffsetX = detector.focusX
+            return true
+        }
+
+        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+            return true
+        }
+
+        override fun onScaleEnd(detector: ScaleGestureDetector?) {
+        }
+
+    }
+
+    /**
+     * 单击和双击监听
+     */
+    inner class SimpleListener : GestureDetector.SimpleOnGestureListener() {
+        /**
+         * 按下事件：需要返回true才能收到后续事件
+         */
+        override fun onDown(e: MotionEvent?): Boolean {
+            return true
+        }
+
+        /**
+         * 按下状态：
+         * 1、在可滑动组件中，要在100ms的延迟后才会调用该方法
+         * 2、在不可滑动组件中，在down时间后就会调用该方法
+         */
+        override fun onShowPress(e: MotionEvent?) {
+        }
+
+        /**
+         * 点击时被调用（支持长按时，长按后松手不会被调用，双击的第二下时不会被调用）
+         */
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            return false
+        }
+
+        /**
+         * 用户滑动时被调用
+         * down时间之后，该时间被调用
+         * 时间是按下时的事件和当前的事件
+         * 偏移时前一次和当前位置的偏移
+         */
+        override fun onScroll(
+            downEvent: MotionEvent?,
+            curEvent: MotionEvent?,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            if (isBig) {
+                originOffsetX -= distanceX
+                originOffsetY -= distanceY
+                originOffsetX = min(originOffsetX, maxOffsetX)
+                originOffsetX = max(originOffsetX, -maxOffsetX)
+                originOffsetY = min(originOffsetY, maxOffsetY)
+                originOffsetY = max(originOffsetY, -maxOffsetY)
+                invalidate()
+            }
+            return false
+        }
+
+        /**
+         * 用户长按（500ms）时被触发
+         */
+        override fun onLongPress(e: MotionEvent?) {
+        }
+
+        private val overScroller = OverScroller(context)
+
+        /**
+         * 用户滑动时迅速抬起时被调用，用于用户希望控件进行惯性滑动的场景
+         */
+        override fun onFling(
+            downEvent: MotionEvent?,
+            curEvent: MotionEvent?,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            Log.i("lpq", "onFling: velocityX = $velocityX velocityY = $velocityY")
+            if (isBig) {
+                overScroller.fling(
+                    originOffsetX.toInt(),
+                    originOffsetY.toInt(),
+                    velocityX.toInt(),
+                    velocityY.toInt(),
+                    -maxOffsetX.toInt(),
+                    maxOffsetX.toInt(),
+                    -maxOffsetY.toInt(),
+                    maxOffsetY.toInt(),
+                    20.dp.toInt(),
+                    20.dp.toInt()
+                )
+                postOnAnimation(flingRunnable)
+            }
+            return false
+        }
+
+        private val flingRunnable = FlingRunnable()
+
+        inner class FlingRunnable : Runnable {
+            override fun run() {
+                val isRunning = overScroller.computeScrollOffset()
+                if (isRunning) {
+                    originOffsetX = overScroller.currX.toFloat()
+                    originOffsetY = overScroller.currY.toFloat()
+                    invalidate()
+                    postOnAnimation(this)
+                }
+            }
+
+        }
+
+        /**
+         * 用户单击时被调用
+         * 和onSingleTap的区别在于，需要在抬起后300ms内没有down事件才会被调用
+         */
+        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+            return false
+        }
+
+        /**
+         * 双击之后被调用，两次点击down事件
+         */
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            isBig = !isBig
+            if (isBig) {
+                val offsetScale = (bigScale * scaleModulus - smallScale) / 2
+                var x = offsetScale * (e.x - width / 2)
+                var y = offsetScale * (e.y - height / 2)
+                x = min(x, maxOffsetX)
+                x = max(x, -maxOffsetX)
+                y = min(y, maxOffsetY)
+                y = max(y, -maxOffsetY)
+                originOffsetX = -x
+                originOffsetY = -y
+                scaleAnimator.start()
+            } else {
+                scaleAnimator.reverse()
+            }
+            return false
+        }
+
+        override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+            return false
+        }
+    }
+
+    /**
+     * 获取图片bitmap
+     */
     private fun getBitmap(width: Int): Bitmap {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
@@ -115,136 +273,5 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         options.inDensity = options.outWidth
         options.inTargetDensity = width
         return BitmapFactory.decodeResource(resources, R.drawable.avatar, options)
-    }
-
-    /**
-     * 按下事件：需要返回true才能收到后续事件
-     */
-    override fun onDown(e: MotionEvent?): Boolean {
-        return true
-    }
-
-    /**
-     * 按下状态：
-     * 1、在可滑动组件中，要在100ms的延迟后才会调用该方法
-     * 2、在不可滑动组件中，在down时间后就会调用该方法
-     */
-    override fun onShowPress(e: MotionEvent?) {
-    }
-
-    /**
-     * 点击时被调用（支持长按时，长按后松手不会被调用，双击的第二下时不会被调用）
-     */
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        return false
-    }
-
-    /**
-     * 用户滑动时被调用
-     * down时间之后，该时间被调用
-     * 时间是按下时的事件和当前的事件
-     * 偏移时前一次和当前位置的偏移
-     */
-    override fun onScroll(
-        downEvent: MotionEvent?,
-        curEvent: MotionEvent?,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        if (isBig) {
-            originOffsetX -= distanceX
-            originOffsetY -= distanceY
-            originOffsetX = min(originOffsetX, maxOffsetX)
-            originOffsetX = max(originOffsetX, -maxOffsetX)
-            originOffsetY = min(originOffsetY, maxOffsetY)
-            originOffsetY = max(originOffsetY, -maxOffsetY)
-            invalidate()
-        }
-        return false
-    }
-
-    /**
-     * 用户长按（500ms）时被触发
-     */
-    override fun onLongPress(e: MotionEvent?) {
-    }
-
-    private val overScroller = OverScroller(context)
-
-    /**
-     * 用户滑动时迅速抬起时被调用，用于用户希望控件进行惯性滑动的场景
-     */
-    override fun onFling(
-        downEvent: MotionEvent?,
-        curEvent: MotionEvent?,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
-        Log.i("lpq", "onFling: velocityX = $velocityX velocityY = $velocityY")
-        if (isBig) {
-            overScroller.fling(
-                originOffsetX.toInt(),
-                originOffsetY.toInt(),
-                velocityX.toInt(),
-                velocityY.toInt(),
-                -maxOffsetX.toInt(),
-                maxOffsetX.toInt(),
-                -maxOffsetY.toInt(),
-                maxOffsetY.toInt(),
-                20.dp.toInt(),
-                20.dp.toInt()
-            )
-            postOnAnimation(flingRunnable)
-        }
-        return false
-    }
-
-    private val flingRunnable = FlingRunnable()
-
-    inner class FlingRunnable : Runnable {
-        override fun run() {
-            val isRunning = overScroller.computeScrollOffset()
-            if (isRunning) {
-                originOffsetX = overScroller.currX.toFloat()
-                originOffsetY = overScroller.currY.toFloat()
-                invalidate()
-                postOnAnimation(this)
-            }
-        }
-
-    }
-
-    /**
-     * 用户单击时被调用
-     * 和onSingleTap的区别在于，需要在抬起后300ms内没有down事件才会被调用
-     */
-    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-        return false
-    }
-
-    /**
-     * 双击之后被调用，两次点击down事件
-     */
-    override fun onDoubleTap(e: MotionEvent): Boolean {
-        isBig = !isBig
-        if (isBig) {
-            val offsetScale = (bigScale * scaleModulus - smallScale) / 2
-            var x = offsetScale * (e.x - width / 2)
-            var y = offsetScale * (e.y - height / 2)
-            x = min(x, maxOffsetX)
-            x = max(x, -maxOffsetX)
-            y = min(y, maxOffsetY)
-            y = max(y, -maxOffsetY)
-            originOffsetX = -x
-            originOffsetY = -y
-            scaleAnimator.start()
-        } else {
-            scaleAnimator.reverse()
-        }
-        return false
-    }
-
-    override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
-        return false
     }
 }
