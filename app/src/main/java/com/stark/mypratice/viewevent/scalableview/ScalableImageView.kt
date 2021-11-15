@@ -18,6 +18,7 @@ import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.OverScroller
 import androidx.core.view.GestureDetectorCompat
 import com.stark.mypratice.R
 import com.stark.mypratice.dp
@@ -87,8 +88,8 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
             smallScale = h / IMAGE_HEIGHT
             bigScale = w / IMAGE_WIDTH
         }
-        maxOffsetX = ((IMAGE_WIDTH * bigScale) * scaleModulus - w)/2
-        maxOffsetY = ((IMAGE_WIDTH * bigScale) * scaleModulus - h)/2
+        maxOffsetX = ((IMAGE_WIDTH * bigScale) * scaleModulus - w) / 2
+        maxOffsetY = ((IMAGE_WIDTH * bigScale) * scaleModulus - h) / 2
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -106,11 +107,11 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     private fun getBitmap(width: Int): Bitmap {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
-        BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options)
+        BitmapFactory.decodeResource(resources, R.drawable.avatar, options)
         options.inJustDecodeBounds = false
         options.inDensity = options.outWidth
         options.inTargetDensity = width
-        return BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options)
+        return BitmapFactory.decodeResource(resources, R.drawable.avatar, options)
     }
 
     /**
@@ -165,6 +166,8 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     override fun onLongPress(e: MotionEvent?) {
     }
 
+    private val overScroller = OverScroller(context)
+
     /**
      * 用户滑动时迅速抬起时被调用，用于用户希望控件进行惯性滑动的场景
      */
@@ -174,7 +177,36 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         velocityX: Float,
         velocityY: Float
     ): Boolean {
+        Log.i("lpq", "onFling: velocityX = $velocityX velocityY = $velocityY")
+        if (isBig) {
+            overScroller.fling(
+                offsetX.toInt(),
+                offsetY.toInt(),
+                velocityX.toInt(),
+                velocityY.toInt(),
+                -maxOffsetX.toInt(),
+                maxOffsetX.toInt(),
+                -maxOffsetY.toInt(),
+                maxOffsetY.toInt()
+            )
+            postOnAnimation(flingRunnable)
+        }
         return false
+    }
+
+    private val flingRunnable = FlingRunnable()
+
+    inner class FlingRunnable : Runnable {
+        override fun run() {
+            val isRunning = overScroller.computeScrollOffset()
+            if (isRunning) {
+                offsetX = overScroller.currX.toFloat()
+                offsetY = overScroller.currY.toFloat()
+                invalidate()
+                postOnAnimation(this)
+            }
+        }
+
     }
 
     /**
