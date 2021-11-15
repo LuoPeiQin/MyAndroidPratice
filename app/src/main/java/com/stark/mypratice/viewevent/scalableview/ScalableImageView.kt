@@ -187,7 +187,9 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
                 -maxOffsetX.toInt(),
                 maxOffsetX.toInt(),
                 -maxOffsetY.toInt(),
-                maxOffsetY.toInt()
+                maxOffsetY.toInt(),
+                20.dp.toInt(),
+                20.dp.toInt()
             )
             postOnAnimation(flingRunnable)
         }
