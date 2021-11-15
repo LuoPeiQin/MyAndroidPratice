@@ -55,8 +55,8 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     private var bigScale = 0f
     private var scaleModulus = 1.5f
     private var isBig = false
-    private var offsetX = 0f
-    private var offsetY = 0f
+    private var originOffsetX = 0f
+    private var originOffsetY = 0f
     private var maxOffsetX = 0f
     private var maxOffsetY = 0f
     private val gestureDetectorCompat = GestureDetectorCompat(context, this).apply {
@@ -93,7 +93,10 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.translate(offsetX, offsetY)
+        canvas.translate(
+            originOffsetX * fractionScale,
+            originOffsetY * fractionScale
+        )
         val scale = smallScale + (bigScale * scaleModulus - smallScale) * fractionScale
         canvas.scale(scale, scale, width / 2f, height / 2f)
         canvas.drawBitmap(
@@ -149,12 +152,12 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         distanceY: Float
     ): Boolean {
         if (isBig) {
-            offsetX -= distanceX
-            offsetY -= distanceY
-            offsetX = min(offsetX, maxOffsetX)
-            offsetX = max(offsetX, -maxOffsetX)
-            offsetY = min(offsetY, maxOffsetY)
-            offsetY = max(offsetY, -maxOffsetY)
+            originOffsetX -= distanceX
+            originOffsetY -= distanceY
+            originOffsetX = min(originOffsetX, maxOffsetX)
+            originOffsetX = max(originOffsetX, -maxOffsetX)
+            originOffsetY = min(originOffsetY, maxOffsetY)
+            originOffsetY = max(originOffsetY, -maxOffsetY)
             invalidate()
         }
         return false
@@ -180,8 +183,8 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         Log.i("lpq", "onFling: velocityX = $velocityX velocityY = $velocityY")
         if (isBig) {
             overScroller.fling(
-                offsetX.toInt(),
-                offsetY.toInt(),
+                originOffsetX.toInt(),
+                originOffsetY.toInt(),
                 velocityX.toInt(),
                 velocityY.toInt(),
                 -maxOffsetX.toInt(),
@@ -202,8 +205,8 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
         override fun run() {
             val isRunning = overScroller.computeScrollOffset()
             if (isRunning) {
-                offsetX = overScroller.currX.toFloat()
-                offsetY = overScroller.currY.toFloat()
+                originOffsetX = overScroller.currX.toFloat()
+                originOffsetY = overScroller.currY.toFloat()
                 invalidate()
                 postOnAnimation(this)
             }
@@ -222,9 +225,18 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     /**
      * 双击之后被调用，两次点击down事件
      */
-    override fun onDoubleTap(e: MotionEvent?): Boolean {
+    override fun onDoubleTap(e: MotionEvent): Boolean {
         isBig = !isBig
         if (isBig) {
+            val offsetScale = (bigScale * scaleModulus - smallScale) / 2
+            var x = offsetScale * (e.x - width / 2)
+            var y = offsetScale * (e.y - height / 2)
+            x = min(x, maxOffsetX)
+            x = max(x, -maxOffsetX)
+            y = min(y, maxOffsetY)
+            y = max(y, -maxOffsetY)
+            originOffsetX = -x
+            originOffsetY = -y
             scaleAnimator.start()
         } else {
             scaleAnimator.reverse()
