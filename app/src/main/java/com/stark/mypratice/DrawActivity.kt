@@ -22,6 +22,24 @@ class DrawActivity : AppCompatActivity() {
 
     }
 
+    fun onClick(view: View) {
+        findViewById<View>(R.id.mfImageView1).visibility = View.INVISIBLE
+        findViewById<View>(R.id.mfImageView2).visibility = View.INVISIBLE
+        findViewById<View>(R.id.mfImageView3).visibility = View.INVISIBLE
+        when(view.id) {
+            R.id.btn1 -> {
+                findViewById<View>(R.id.mfImageView1).visibility = View.VISIBLE
+            }
+            R.id.btn2 -> {
+                findViewById<View>(R.id.mfImageView2).visibility = View.VISIBLE
+            }
+            R.id.btn3 -> {
+                findViewById<View>(R.id.mfImageView3).visibility = View.VISIBLE
+            }
+        }
+    }
+
+
     /**
      * 第15节课的测试代码
      */
@@ -73,4 +91,5 @@ class DrawActivity : AppCompatActivity() {
 //        animator4.duration = 2000
 //        animator4.start()
     }
+
 }
