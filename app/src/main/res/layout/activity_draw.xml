@@ -1,57 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.stark.mypratice.viewevent.scalableview.ScalableImageView
+<com.stark.mypratice.viewevent.multi_finger.MultiFingerImageView1
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1">-->
-
-<!--        <com.stark.mypratice.view.layout.SquareView-->
-<!--            android:layout_width="300dp"-->
-<!--            android:layout_height="200dp"-->
-<!--            android:src="@drawable/avatar_rengwuxian" />-->
-
-<!--        <View-->
-<!--            android:layout_width="300dp"-->
-<!--            android:layout_height="300dp"-->
-<!--            android:background="@color/colorAccent" />-->
-<!--    </LinearLayout>-->
-
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1">-->
-
-<!--        <com.stark.mypratice.view.layout.CircleView-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="200dp"-->
-<!--            android:background="@color/colorAccent" />-->
-<!--    </LinearLayout>-->
-
-
-    <!--    <com.stark.mypratice.view.draw.PointView-->
-    <!--        android:id="@+id/view_2"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        android:layout_weight="1" />-->
-
-    <!--    <com.stark.mypratice.view.draw.CameraView-->
-    <!--        android:id="@+id/view_3"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        android:layout_weight="2" />-->
-
-    <!--    <com.stark.mypratice.view.draw.ContentTextView-->
-    <!--        android:id="@+id/view_4"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        android:layout_weight="1" />-->
-
-</com.stark.mypratice.viewevent.scalableview.ScalableImageView>
+    android:layout_height="match_parent"/>
