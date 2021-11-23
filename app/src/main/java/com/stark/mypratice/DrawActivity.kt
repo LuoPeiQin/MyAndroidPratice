@@ -14,7 +14,7 @@ import com.stark.mypratice.view.draw.PointView
 class DrawActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_draw)
+        setContentView(R.layout.activity_two_pager)
     }
 
     override fun onResume() {
