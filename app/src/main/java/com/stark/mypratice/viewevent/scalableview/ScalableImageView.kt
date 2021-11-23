@@ -63,43 +63,51 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
     private val gestureDetectorCompat = GestureDetectorCompat(context, simpleListener)
     private val simpleScaleListener = SimpleScaleListener()
     private val scaleGestureDetector = ScaleGestureDetector(context, simpleScaleListener)
-    private var fractionScale = 0f
+    private var curScale = 0f
         set(value) {
             field = value
             invalidate()
         }
 
-    private var scaleAnimator = ObjectAnimator.ofFloat(this, "fractionScale", 0f, 1f)
+    private var scaleAnimator = ObjectAnimator.ofFloat(this, "curScale", smallScale, bigScale)
 
     init {
         IMAGE_HEIGHT = bitmap.height.toFloat()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-//        return super.onTouchEvent(event)
-        return scaleGestureDetector.onTouchEvent(event)
+        scaleGestureDetector.onTouchEvent(event)
+        if (!scaleGestureDetector.isInProgress) {
+            gestureDetectorCompat.onTouchEvent(event)
+        }
+        return true
+//        return gestureDetectorCompat.onTouchEvent(event)
+//        return scaleGestureDetector.onTouchEvent(event)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         if (h / IMAGE_HEIGHT > w / IMAGE_WIDTH) {
             smallScale = w / IMAGE_WIDTH
-            bigScale = h / IMAGE_HEIGHT
+            bigScale = h / IMAGE_HEIGHT * scaleModulus
         } else {
             smallScale = h / IMAGE_HEIGHT
-            bigScale = w / IMAGE_WIDTH
+            bigScale = w / IMAGE_WIDTH * scaleModulus
         }
-        maxOffsetX = ((IMAGE_WIDTH * bigScale) * scaleModulus - w) / 2
-        maxOffsetY = ((IMAGE_WIDTH * bigScale) * scaleModulus - h) / 2
+        maxOffsetX = ((IMAGE_WIDTH * bigScale)  - w) / 2
+        maxOffsetY = ((IMAGE_WIDTH * bigScale)  - h) / 2
+        curScale = smallScale
+        scaleAnimator.setFloatValues(smallScale, bigScale)
     }
 
     override fun onDraw(canvas: Canvas) {
+        val fractionScale = (curScale - smallScale)/(bigScale - smallScale)
         canvas.translate(
             originOffsetX * fractionScale,
             originOffsetY * fractionScale
         )
-        val scale = smallScale + (bigScale * scaleModulus - smallScale) * fractionScale
-        canvas.scale(scale, scale, width / 2f, height / 2f)
+//        val scale = smallScale + (bigScale * scaleModulus - smallScale) * fractionScale
+        canvas.scale(curScale, curScale, width / 2f, height / 2f)
         canvas.drawBitmap(
             bitmap,
             width / 2f - IMAGE_WIDTH / 2,
@@ -113,11 +121,18 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
      */
     inner class SimpleScaleListener : ScaleGestureDetector.OnScaleGestureListener {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-//            originOffsetX = detector.focusX
-            return true
+            val tempCurrentScale = curScale * detector.scaleFactor
+            if (tempCurrentScale < smallScale || tempCurrentScale > bigScale) {
+                return false
+            } else {
+                curScale *= detector.scaleFactor // 0 1; 0 无穷
+                return true
+            }
         }
 
-        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+            originOffsetX = (detector.focusX - width / 2f) * (1 - bigScale / smallScale)
+            originOffsetY = (detector.focusY - height / 2f) * (1 - bigScale / smallScale)
             return true
         }
 
