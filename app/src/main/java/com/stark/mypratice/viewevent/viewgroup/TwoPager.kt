@@ -10,6 +10,7 @@ package com.stark.mypratice.viewevent.viewgroup
 import android.content.Context
 import android.util.AttributeSet
 import android.view.*
+import android.widget.OverScroller
 import androidx.core.view.children
 import kotlin.math.abs
 
@@ -36,6 +37,8 @@ class TwoPager(context: Context?, attrs: AttributeSet?) : ViewGroup(context, att
     private var downX = 0f
     private var downY = 0f
     private var scrolling = false
+    private var downScrollX = 0f
+    private val overScroll = OverScroller(context)
     private val velocityTracker = VelocityTracker.obtain()
     private val viewConfiguration = ViewConfiguration.get(context)
     private val minFlingVelocity = viewConfiguration.scaledMinimumFlingVelocity
@@ -53,6 +56,7 @@ class TwoPager(context: Context?, attrs: AttributeSet?) : ViewGroup(context, att
                 scrolling = false
                 downX = ev.x
                 downY = ev.y
+                downScrollX = scrollX.toFloat()
             }
             MotionEvent.ACTION_MOVE -> {
                 if (!scrolling) {
@@ -78,23 +82,34 @@ class TwoPager(context: Context?, attrs: AttributeSet?) : ViewGroup(context, att
                 scrolling = false
                 downX = ev.x
                 downY = ev.y
+                downScrollX = scrollX.toFloat()
             }
             MotionEvent.ACTION_MOVE -> {
-                if (!scrolling) {
-                    val scrollX = downX - ev.x
-                    if (abs(scrollX) > minTouchSlop) {
-                        scrolling = true
-                        parent.requestDisallowInterceptTouchEvent(true)
-                    }
-                } else {
-                    scrollTo((downX - ev.x).toInt(), 0)
-                }
+                val dx = (downX - ev.x + downScrollX).toInt().coerceAtLeast(0).coerceAtMost(width)
+                scrollTo(dx, 0)
             }
             MotionEvent.ACTION_UP -> {
-                
+                velocityTracker.computeCurrentVelocity(1000, maxFlingVelocity.toFloat())
+                val xVelocity = velocityTracker.xVelocity
+                val scrollX = scrollX
+                val targetPage = if (abs(xVelocity) < minFlingVelocity) {
+                    if (scrollX > width / 2) 1 else 0
+                } else {
+                    if (xVelocity < 0) 1 else 0
+                }
+                val scrollDistance = if (targetPage == 1) width - scrollX else -scrollX
+                overScroll.startScroll(getScrollX(), 0, scrollDistance, 0)
+                postInvalidateOnAnimation()
             }
         }
         return true
+    }
+
+    override fun computeScroll() {
+        if (overScroll.computeScrollOffset()) {
+            scrollTo(overScroll.currX, overScroll.currY)
+            postInvalidateOnAnimation()
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
