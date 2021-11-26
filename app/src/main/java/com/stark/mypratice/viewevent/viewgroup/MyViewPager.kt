@@ -36,10 +36,12 @@ class MyViewPager(context: Context?, attrs: AttributeSet?) : ViewGroup(context, 
      * 3、UP做滑动判断，开始滑动或缩回动画；
      */
     private var downX = 0f
-//    private var downY = 0f
+
+    //    private var downY = 0f
     private var scrolling = false
     private var downScrollX = 0f
     private var curPage = 0
+    private var dx = 0
     private val overScroll = OverScroller(context)
     private val velocityTracker = VelocityTracker.obtain()
     private val viewConfiguration = ViewConfiguration.get(context)
@@ -87,22 +89,57 @@ class MyViewPager(context: Context?, attrs: AttributeSet?) : ViewGroup(context, 
                 Log.i("lpq", "onTouchEvent: ACTION_DOWN: downX = $downX downScrollX = $downScrollX")
             }
             MotionEvent.ACTION_MOVE -> {
-                val dx = (downX - ev.x + downScrollX).toInt().coerceAtLeast(0).coerceAtMost((childCount - 1) * width)
-                Log.i("lpq", "onTouchEvent: ACTION_MOVE: dx = $dx")
+                dx = (downX - ev.x + downScrollX).toInt().coerceAtLeast(0)
+                    .coerceAtMost((childCount - 1) * width)
+//                Log.i("lpq", "onTouchEvent: ACTION_MOVE: dx = $dx")
                 scrollTo(dx, 0)
             }
             MotionEvent.ACTION_UP -> {
                 velocityTracker.computeCurrentVelocity(1000, maxFlingVelocity.toFloat())
                 val xVelocity = velocityTracker.xVelocity
-                val scrollDx = downX - ev.x
+                Log.i("lpq", "onTouchEvent: ACTION_MOVE: dx = $dx")
+                val scrollDx = dx - downScrollX
                 Log.i("lpq", "onTouchEvent: scrollDx = $scrollDx")
-                Log.i("lpq", "onTouchEvent: ACTION_UP: scrollX = $scrollX")
-                val targetPage = if (abs(xVelocity) < minFlingVelocity) {
-                    if (scrollDx > width / 2) curPage + 1 else curPage
+                Log.i("lpq", "onTouchEvent: curPage = $curPage")
+                var scrollDistance = if (abs(xVelocity) < minFlingVelocity) {
+                    Log.i("lpq", "onTouchEvent: xVelocity 小于 minFlingVelocity")
+                    if (scrollDx > width / 2) {
+                        if (curPage == childCount - 1) {
+                            Log.i("lpq", "onTouchEvent: 异常情况1")
+                        } else {
+                            curPage++
+                            width - scrollDx
+                        }
+                    } else if (scrollDx < (-width / 2)) {
+                        if (curPage == 0) {
+                            Log.i("lpq", "onTouchEvent: 异常情况2")
+                        } else {
+                            curPage--
+                            -(width - abs(scrollDx))
+                        }
+                    } else {
+                        -scrollDx
+                    }
                 } else {
-                    if (xVelocity < 0) 1 else 0
+                    if (xVelocity < 0) {
+                        Log.i("lpq", "onTouchEvent: xVelocity 小于 0")
+                        if (curPage == childCount - 1) {
+                            -scrollDx
+                        } else {
+                            curPage++
+                            width - abs(scrollDx)
+                        }
+                    } else {
+                        Log.i("lpq", "onTouchEvent: xVelocity 大于 0")
+                        if (curPage == 0) {
+                            -scrollDx
+                        } else {
+                            curPage--
+                            -(width - abs(scrollDx))
+                        }
+                    }
                 }
-                val scrollDistance = if (targetPage == 1) width - scrollDx else -scrollDx
+                Log.i("lpq", "onTouchEvent: ACTION_UP: scrollX = $scrollX  scrollDistance = $scrollDistance")
                 overScroll.startScroll(scrollX, 0, scrollDistance.toInt(), 0)
                 postInvalidateOnAnimation()
             }
