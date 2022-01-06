@@ -1,43 +1,57 @@
 package com.stark.mypratice
 
-import android.animation.*
-import android.graphics.PointF
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import com.stark.mypratice.view.draw.CameraView
-import com.stark.mypratice.view.draw.ContentTextView
-import com.stark.mypratice.view.draw.PointView
+import androidx.appcompat.app.AppCompatActivity
+import com.stark.mypratice.view.business.WeeklyScoreView
 
 class DrawActivity : AppCompatActivity() {
+
+    private lateinit var weeklyScoreView: WeeklyScoreView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_two_pager)
+        setContentView(R.layout.activity_weekly_score_view)
+        weeklyScoreView = findViewById<WeeklyScoreView>(R.id.weeklyScoreView)
+    }
+
+    var i = 0
+    @Override
+    fun onClick(v: View) {
+//        weeklyScoreView.animate().scaleX(0.8f).start()
+        val value = i % 6
+        when (value) {
+            0 -> weeklyScoreView.setNoValue()
+            1 -> weeklyScoreView.setValue(listOf(-1, -1, -1, 7, 8, 4, 2))
+            2 -> weeklyScoreView.setValue(listOf(-1, -1, -1, -1, -1, -1, 5))
+            3 -> weeklyScoreView.setValue(listOf(-1, -1, -1, 5, -1, -1, -1))
+            4 -> weeklyScoreView.setValue(listOf(5, 3, 4, 7, 8, 4, 3))
+            5 -> weeklyScoreView.animate().scaleX(0.8f).start()
+        }
+        i++
+
     }
 
     override fun onResume() {
         super.onResume()
-
     }
 
-    fun onClick(view: View) {
-//        findViewById<View>(R.id.mfImageView1).visibility = View.INVISIBLE
-//        findViewById<View>(R.id.mfImageView2).visibility = View.INVISIBLE
-//        findViewById<View>(R.id.mfImageView3).visibility = View.INVISIBLE
-//        when(view.id) {
-//            R.id.btn1 -> {
-//                findViewById<View>(R.id.mfImageView1).visibility = View.VISIBLE
-//            }
-//            R.id.btn2 -> {
-//                findViewById<View>(R.id.mfImageView2).visibility = View.VISIBLE
-//            }
-//            R.id.btn3 -> {
-//                findViewById<View>(R.id.mfImageView3).visibility = View.VISIBLE
-//            }
-//        }
-    }
+//    fun onClick(view: View) {
+////        findViewById<View>(R.id.mfImageView1).visibility = View.INVISIBLE
+////        findViewById<View>(R.id.mfImageView2).visibility = View.INVISIBLE
+////        findViewById<View>(R.id.mfImageView3).visibility = View.INVISIBLE
+////        when(view.id) {
+////            R.id.btn1 -> {
+////                findViewById<View>(R.id.mfImageView1).visibility = View.VISIBLE
+////            }
+////            R.id.btn2 -> {
+////                findViewById<View>(R.id.mfImageView2).visibility = View.VISIBLE
+////            }
+////            R.id.btn3 -> {
+////                findViewById<View>(R.id.mfImageView3).visibility = View.VISIBLE
+////            }
+////        }
+//    }
 
 
     /**
