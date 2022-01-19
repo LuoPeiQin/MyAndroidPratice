@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.stark.mypratice.view.business.WeeklyScoreView
+import java.util.*
 
 class DrawActivity : AppCompatActivity() {
 
@@ -19,14 +20,15 @@ class DrawActivity : AppCompatActivity() {
     @Override
     fun onClick(v: View) {
 //        weeklyScoreView.animate().scaleX(0.8f).start()
-        val value = i % 6
+        val value = i % 7
         when (value) {
             0 -> weeklyScoreView.setNoValue()
             1 -> weeklyScoreView.setValue(listOf(-1, -1, -1, 7, 8, 4, 2))
-            2 -> weeklyScoreView.setValue(listOf(-1, -1, -1, -1, -1, -1, 5))
-            3 -> weeklyScoreView.setValue(listOf(-1, -1, -1, 5, -1, -1, -1))
-            4 -> weeklyScoreView.setValue(listOf(5, 3, 4, 7, 8, 4, 3))
-            5 -> weeklyScoreView.animate().scaleX(0.8f).start()
+            2 -> weeklyScoreView.setValue(listOf(5, -1, 6, -1, 4, 5, 3))
+            3 -> weeklyScoreView.setValue(listOf(-1, -1, -1, -1, -1, -1, 5))
+            4 -> weeklyScoreView.setValue(listOf(-1, -1, -1, 5, -1, -1, -1))
+            5 -> weeklyScoreView.setValue(listOf(5, 3, 4, 7, 8, 4, 3))
+            6 -> weeklyScoreView.animate().scaleX(0.8f).start()
         }
         i++
 
