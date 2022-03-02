@@ -31,7 +31,12 @@ private val COLUMN = 2
 
 class DragHelperLayout(context: Context?, attrs: AttributeSet?) : ViewGroup(context, attrs) {
 
-    val viewDragHelper = ViewDragHelper.create(this, object : ViewDragHelper.Callback() {
+    val viewDragHelper = ViewDragHelper.create(this, DragHelperCallback())
+
+    inner class DragHelperCallback : ViewDragHelper.Callback() {
+        var startLeft = 0
+        var startTop = 0
+
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
             return true
         }
@@ -45,7 +50,18 @@ class DragHelperLayout(context: Context?, attrs: AttributeSet?) : ViewGroup(cont
             Log.i("lpq", "clampViewPositionVertical: top = $top")
             return top
         }
-    })
+
+        override fun onViewCaptured(capturedChild: View, activePointerId: Int) {
+            capturedChild.elevation = capturedChild.elevation + 1
+            startLeft = capturedChild.left
+            startTop = capturedChild.top
+        }
+
+        override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+            viewDragHelper.settleCapturedViewAt(startLeft, startTop)
+            postInvalidateOnAnimation()
+        }
+    }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         return viewDragHelper.shouldInterceptTouchEvent(ev)
