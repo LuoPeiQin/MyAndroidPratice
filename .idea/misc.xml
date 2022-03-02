@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProject/DemoProject/MyAndroidPratice/app/src/main/res/layout/activity_drag_helper_layout.xml" value="0.35208333333333336" />
+        <entry key="..\:/AndroidProject/DemoProject/MyAndroidPratice/app/src/main/res/layout/activity_layout_test.xml" value="0.35208333333333336" />
         <entry key="..\:/AndroidProject/DemoProject/MyAndroidPratice/app/src/main/res/layout/activity_two_pager.xml" value="0.35208333333333336" />
         <entry key="..\:/AndroidProject/DemoProject/MyAndroidPratice/app/src/main/res/layout/activity_weekly_score_view.xml" value="0.35208333333333336" />
       </map>
