@@ -12,7 +12,7 @@ class DrawActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_drag_helper_layout)
+        setContentView(R.layout.drag_to_collect_layout)
     }
 
 //    var i = 0

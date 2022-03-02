@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.stark.mypratice.view.drag.DragToCollectLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/avatar" />
+
+    <ImageView
+        android:id="@+id/iv2"
+        android:layout_marginTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/avatar_rengwuxian" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="100dp"
+        android:layout_weight="1"
+        android:background="@color/colorAccent"
+        android:textSize="16dp"
+        android:textColor="@color/white"/>
+
+</com.stark.mypratice.view.drag.DragToCollectLayout>
