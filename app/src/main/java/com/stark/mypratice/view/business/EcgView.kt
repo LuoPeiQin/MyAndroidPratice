@@ -14,7 +14,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
-import android.widget.Scroller
+import android.widget.OverScroller
 import com.stark.mypratice.data.EcgData
 import com.stark.mypratice.dp
 
@@ -52,7 +52,7 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     val MAX_PARAMS = 8000
     private var ecgData = EcgData.data
     var ecgStartX = 0f
-    private val mScroller: Scroller = Scroller(context)
+    private val mOverScroller: OverScroller = OverScroller(context)
     private var mVelocityTracker = VelocityTracker.obtain()
 
     init {
@@ -162,7 +162,7 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 val xVelocity = mVelocityTracker.xVelocity.toInt()
                 if (Math.abs(xVelocity) >= 50) {
                     Log.i("lpq", "onTouchEvent: scrollX = $scrollX")
-                    mScroller.fling(scrollX, 0, -xVelocity, 0,
+                    mOverScroller.fling(scrollX, 0, -xVelocity, 0,
                         0, (drawWidth - width).toInt(), Int.MIN_VALUE, Int.MAX_VALUE)
                     mVelocityTracker.clear()
                 }
@@ -173,8 +173,8 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     override fun computeScroll() {
-        if (mScroller.computeScrollOffset()) {
-            scrollTo(mScroller.currX, mScroller.currY)
+        if (mOverScroller.computeScrollOffset()) {
+            scrollTo(mOverScroller.currX, mOverScroller.currY)
             postInvalidate()
         }
     }
