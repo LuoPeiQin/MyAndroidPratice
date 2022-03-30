@@ -3,16 +3,49 @@ package com.stark.mypratice
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.stark.mypratice.data.EcgData
+import com.stark.mypratice.view.business.EcgView
 import com.stark.mypratice.view.business.WeeklyScoreView
-import java.util.*
+import kotlin.concurrent.thread
 
 class DrawActivity : AppCompatActivity() {
 
     private lateinit var weeklyScoreView: WeeklyScoreView
 
+    var ecgView: EcgView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ecg_layout)
+        ecgView = findViewById<EcgView>(R.id.ecgView)
+
+    }
+
+    @Override
+    fun onClick(v: View) {
+        when (v.id) {
+            R.id.btnSetData -> {
+                ecgView?.touchEnable = true
+                ecgView?.setData(EcgData.data.toMutableList())
+            }
+            R.id.btnAddData -> {
+                ecgView?.touchEnable = false
+                val data = EcgData.data
+                val timesData = mutableListOf<Int>()
+                thread {
+                    for ((index, temp) in data.withIndex()) {
+                        timesData.add(temp)
+                        if (index % 10 == 0) {
+                            ecgView?.addData(timesData)
+                            timesData.clear()
+                            Thread.sleep(30)
+                        }
+                    }
+                    ecgView?.touchEnable = true
+                }
+            }
+        }
+
     }
 
 //    var i = 0

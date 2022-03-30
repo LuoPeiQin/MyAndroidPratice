@@ -8,15 +8,18 @@
 package com.stark.mypratice.view.business
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.widget.OverScroller
-import com.stark.mypratice.data.EcgData
 import com.stark.mypratice.dp
+import kotlin.math.max
 
 /**
  *
@@ -50,10 +53,16 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     // 数据
     val MAX_PARAMS = 8000
-    private var ecgData = EcgData.data
+    private var ecgData = mutableListOf<Int>()
     var ecgStartX = 0f
     private val mOverScroller: OverScroller = OverScroller(context)
     private var mVelocityTracker = VelocityTracker.obtain()
+
+    /**
+     * 动态模式
+     * 设置是否可以触控 true 用于静态展示(默认值) false 用于动态展示
+     */
+    var touchEnable = true
 
     init {
         mThickLinePaint.color = Color.parseColor("#FFCCCC")
@@ -67,7 +76,7 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        drawWidth = POINT_INTERVAL * ecgData.size
+        drawWidth = max(POINT_INTERVAL * ecgData.size, width.toFloat())
         drawHeight = height.toFloat()
         val scale = drawHeight * 0.8f / MAX_PARAMS / 2
         val centerY = drawHeight / 2
@@ -87,11 +96,65 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         Log.i("lpq", "onDraw: drawHeight = $drawHeight drawWidth = $drawWidth")
     }
 
+    /**
+     * 静态心电图
+     */
+    fun setData(data: MutableList<Int>) {
+        if (!touchEnable) {
+            // 可能还在添加数据
+            return
+        }
+        ecgData.clear()
+        ecgData.addAll(data)
+        drawWidth = max(POINT_INTERVAL * ecgData.size, width.toFloat())
+        val scale = drawHeight * 0.8f / MAX_PARAMS / 2
+        val centerY = drawHeight / 2
+        var tempY = 0f
+        ecgPath.reset()
+        ecgPath.moveTo(ecgStartX, centerY)
+        for ((index, item) in ecgData.withIndex()) {
+            if (ecgStartX <= drawWidth) {
+                tempY = item * scale + centerY
+                ecgStartX += POINT_INTERVAL
+                ecgPath.lineTo(ecgStartX, tempY)
+            } else {
+                Log.i("lpq", "drawEcgLine: 已画点数 = $index")
+                break
+            }
+        }
+        invalidate()
+    }
+
+    /**
+     * 动态心电图 -- 持续添加数据
+     */
+    fun addData(data: MutableList<Int>) {
+        ecgData.addAll(data)
+        drawWidth = max(POINT_INTERVAL * ecgData.size, width.toFloat())
+        val scale = drawHeight * 0.8f / MAX_PARAMS / 2
+        val centerY = drawHeight / 2
+        var tempY = 0f
+        for ((index, item) in data.withIndex()) {
+            if (ecgStartX <= drawWidth) {
+                tempY = item * scale + centerY
+                ecgStartX += POINT_INTERVAL
+                ecgPath.lineTo(ecgStartX, tempY)
+            } else {
+                Log.i("lpq", "drawEcgLine: 已画点数 = $index")
+                break
+            }
+        }
+        invalidate()
+    }
+
     override fun onDraw(canvas: Canvas) {
         // 1、画底部网格线
         // 2、画心电线
         drawBgLine(canvas)
         drawEcgLine(canvas)
+        if (!touchEnable) {
+            scrollTo((drawWidth - width).toInt(), 0)
+        }
     }
 
     /**
@@ -137,6 +200,9 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * 触摸事件
      */
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (!touchEnable) {
+            return false
+        }
         mVelocityTracker.addMovement(event)
         val touchRawX = event.rawX
         when (event.actionMasked) {
@@ -162,8 +228,10 @@ class EcgView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 val xVelocity = mVelocityTracker.xVelocity.toInt()
                 if (Math.abs(xVelocity) >= 50) {
                     Log.i("lpq", "onTouchEvent: scrollX = $scrollX")
-                    mOverScroller.fling(scrollX, 0, -xVelocity, 0,
-                        0, (drawWidth - width).toInt(), Int.MIN_VALUE, Int.MAX_VALUE)
+                    mOverScroller.fling(
+                        scrollX, 0, -xVelocity, 0,
+                        0, (drawWidth - width).toInt(), Int.MIN_VALUE, Int.MAX_VALUE
+                    )
                     mVelocityTracker.clear()
                 }
             }

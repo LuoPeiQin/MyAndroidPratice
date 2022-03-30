@@ -6,9 +6,24 @@
     android:orientation="vertical">
 
     <com.stark.mypratice.view.business.EcgView
+        android:id="@+id/ecgView"
         android:layout_width="match_parent"
         android:layout_height="182dp"
         android:scrollbars="horizontal"
         android:fadeScrollbars="true"/>
+
+    <Button
+        android:id="@+id/btnSetData"
+        android:text="设置数据"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"/>
+
+    <Button
+        android:id="@+id/btnAddData"
+        android:text="添加数据"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"/>
 
 </LinearLayout>
