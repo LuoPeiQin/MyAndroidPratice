@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.stark.mypratice.data.EcgData
 import com.stark.mypratice.view.business.EcgView
+import com.stark.mypratice.view.business.SixEcgPdfPreviewView
 import com.stark.mypratice.view.business.WeeklyScoreView
 import kotlin.concurrent.thread
 
@@ -12,12 +13,12 @@ class DrawActivity : AppCompatActivity() {
 
     private lateinit var weeklyScoreView: WeeklyScoreView
 
-    var ecgView: EcgView? = null
+    private lateinit var ecgView: SixEcgPdfPreviewView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ecg_layout)
-        ecgView = findViewById<EcgView>(R.id.ecgView)
+        ecgView = findViewById<SixEcgPdfPreviewView>(R.id.ecgView)
 
     }
 
@@ -25,25 +26,28 @@ class DrawActivity : AppCompatActivity() {
     fun onClick(v: View) {
         when (v.id) {
             R.id.btnSetData -> {
-                ecgView?.touchEnable = true
-                ecgView?.setData(EcgData.data.toMutableList())
-            }
-            R.id.btnAddData -> {
-                ecgView?.touchEnable = false
-                val data = EcgData.data
-                val timesData = mutableListOf<Int>()
-                thread {
-                    for ((index, temp) in data.withIndex()) {
-                        timesData.add(temp)
-                        if (index % 10 == 0) {
-                            ecgView?.addData(timesData)
-                            timesData.clear()
-                            Thread.sleep(30)
-                        }
-                    }
-                    ecgView?.touchEnable = true
+                EcgData.data.toMutableList()
+                val number = ecgView.getNumberOfDrawablePoints()
+                val list = EcgData.data.toMutableList().subList(0, number)
+                val listList = mutableListOf<List<Int>>()
+                for (i in 0..5) {
+                    listList.add(list)
                 }
+                ecgView.setData(listList)
             }
+//            R.id.btnAddData -> {
+//                val data = EcgData.data
+//                val timesData = mutableListOf<Int>()
+//                thread {
+//                    for ((index, temp) in data.withIndex()) {
+//                        timesData.add(temp)
+//                        if (index % 10 == 0) {
+//                            timesData.clear()
+//                            Thread.sleep(30)
+//                        }
+//                    }
+//                }
+//            }
         }
 
     }
