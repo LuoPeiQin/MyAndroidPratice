@@ -11,4 +11,80 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--通用页面背景色-->
+    <color name="common_page_bg">#F4F6F7</color>
+    <!--按钮配色-->
+    <color name="common_button_color">@color/black</color>
+    <color name="common_button_text_color">@color/black</color>
+    <color name="common_button_text_hint_color">#b4b4b4</color>
+    <!-- 通用横线颜色 -->
+    <color name="common_line">#E8EBED</color>
+
+    <color name="white90">#D9FFFFFF</color>
+    <color name="color_42C8C8">#42C8C8</color>
+    <color name="color_F9FAF9">#F9FAF9</color>
+    <color name="color_5a82ff">#5a82ff</color>
+    <color name="color_187FF3">#187FF3</color>
+    <color name="color_F1F1F1">#F1F1F1</color>
+    <color name="text_red">#ff3c3c</color>
+    <color name="color_D2D2D2">#D2D2D2</color>
+    <color name="color_E8EBED">#E8EBED</color>
+    <color name="color_F4F6F7">#F4F6F7</color>
+    <color name="color_575E66">#575E66</color>
+
+    <color name="trans">#00000000</color>
+    <color name="trans1">#10000000</color>
+    <color name="trans2">#20000000</color>
+    <color name="trans3">#30000000</color>
+    <color name="trans4">#40000000</color>
+    <color name="trans5">#50000000</color>
+    <color name="trans6">#60000000</color>
+    <color name="trans7">#70000000</color>
+    <color name="trans8">#80000000</color>
+    <color name="trans9">#99000000</color>
+    <color name="transban">#e0000000</color>
+
+    <!-- styleableToast的默认颜色 -->
+    <color name="default_background_color">#555555</color>
+    <color name="default_text_color">#ffffff</color>
+
+    <color name="line">#E8EBED</color>
+    <color name="theme_bg_normal">#42c8c8</color>
+    <color name="theme_bg_pressed">#32b8b8</color>
+
+
+    <color name="pickerview_bgColor_default">#FFFFFFFF</color>
+    <color name="pickerview_bgColor_overlay">#60000000</color>
+    <color name="pickerview_bg_topbar">#f5f5f5</color>
+    <color name="pickerview_timebtn_nor">#057dff</color>
+    <color name="pickerview_timebtn_pre">#c2daf5</color>
+    <color name="pickerview_topbar_title">#000000</color>
+    <color name="pickerview_wheelview_textcolor_center">#2a2a2a</color>
+    <color name="pickerview_wheelview_textcolor_divider">#d5d5d5</color>
+    <color name="pickerview_wheelview_textcolor_out">#a8a8a8</color>
+
+    <color name="gray_8A9199">#8A9199</color>
+    <color name="blue_4D97FF">#4D97FF</color>
+    <color name="gray_B6BABF">#B6BABF</color>
+    <color name="green_42D7C8">#42D7C8</color>
+    <color name="gray_F4F6F7">#F4F6F7</color>
+    <color name="gray_575E66">#575E66</color>
+    <color name="cyan_42D7C8">#42D7C8</color>
+    <color name="red_FF4D4D">#FF4D4D</color>
+    <color name="gray_D2D5D9">#D2D5D9</color>
+    <color name="black_66000000">#66000000</color>
+    <color name="green_42D78D">#42D78D</color>
+    <color name="green_42D742">#42D742</color>
+    <color name="green_74D742">#74D742</color>
+    <color name="green_A5D742">#A5D742</color>
+    <color name="green_D7D742">#D7D742</color>
+    <color name="yellow_FFC34D">#FFC34D</color>
+    <color name="orange_D7D742">#FFA64D</color>
+    <color name="orange_FF884D">#FF884D</color>
+    <color name="red_FF6A4D">#FF6A4D</color>
+    <color name="black_CC000000">#CC000000</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_DDDDDD">#DDDDDD</color>
 </resources>

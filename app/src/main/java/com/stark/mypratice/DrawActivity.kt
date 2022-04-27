@@ -18,23 +18,23 @@ class DrawActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ecg_layout)
-        ecgView = findViewById<SixEcgPdfPreviewView>(R.id.ecgView)
+//        ecgView = findViewById<SixEcgPdfPreviewView>(R.id.ecgView)
 
     }
 
     @Override
     fun onClick(v: View) {
         when (v.id) {
-            R.id.btnSetData -> {
-                EcgData.data.toMutableList()
-                val number = ecgView.getNumberOfDrawablePoints()
-                val list = EcgData.data.toMutableList().subList(0, number)
-                val listList = mutableListOf<List<Int>>()
-                for (i in 0..5) {
-                    listList.add(list)
-                }
-                ecgView.setData(listList)
-            }
+//            R.id.btnSetData -> {
+//                EcgData.data.toMutableList()
+//                val number = ecgView.getNumberOfDrawablePoints()
+//                val list = EcgData.data.toMutableList().subList(0, number)
+//                val listList = mutableListOf<List<Int>>()
+//                for (i in 0..5) {
+//                    listList.add(list)
+//                }
+//                ecgView.setData(listList)
+//            }
 //            R.id.btnAddData -> {
 //                val data = EcgData.data
 //                val timesData = mutableListOf<Int>()
