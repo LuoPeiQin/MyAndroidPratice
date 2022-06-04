@@ -8,6 +8,7 @@
 package com.stark.javalib.leetcode;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * @ProjectName: MyPratice
@@ -107,4 +108,38 @@ public class Solution1_10 {
             this.next = next;
         }
     }
+
+    /**
+     * 第3题
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度
+     *
+     * 执行用时：5ms,在所有Java提交中击败了60.26%的用户
+     * 内存消耗：41.3MB,在所有Java提交中击败了69.07%的用户
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() <= 1) {
+            return s.length();
+        }
+        int longestLength = 0;
+        int slowIndex = 0;
+        int fastIndex = 1;
+        HashSet<Character> hashSet = new HashSet();
+        hashSet.add(s.charAt(slowIndex));
+        while (fastIndex < s.length()) {
+            if (hashSet.contains(s.charAt(fastIndex))) {
+                longestLength = Math.max(longestLength, fastIndex - slowIndex);
+                hashSet.remove(s.charAt(slowIndex));
+                slowIndex += 1;
+            } else {
+                hashSet.add(s.charAt(fastIndex));
+                fastIndex += 1;
+            }
+        }
+        longestLength = Math.max(longestLength, fastIndex - slowIndex);
+        return longestLength;
+    }
+
+
 }
