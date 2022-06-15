@@ -1,8 +1,10 @@
 plugins {
     id 'java-library'
+    id 'kotlin-android-extensions'
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.21"
     implementation 'com.squareup.okio:okio:3.0.0-alpha.10'
 }
 
