@@ -4,6 +4,9 @@
     <bytecodeTargetLevel target="1.7">
       <module name="MyAndroidPratice.buildSrc" target="1.8" />
       <module name="MyPratice.app" target="11" />
+      <module name="MyPratice.javalib" target="1.8" />
+      <module name="MyPratice.javalib.main" target="1.8" />
+      <module name="MyPratice.javalib.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
