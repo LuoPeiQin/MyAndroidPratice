@@ -8,6 +8,7 @@
 package com.stark.javalib;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +42,32 @@ public class Test {
         // System.out.println("221235678".matches(re3));
         // System.out.println("422235678".matches(re3));
 
-        test();
-        test1();
+        // 创建一个 HashMap
+        ConcurrentHashMap<Integer, String> sites = new ConcurrentHashMap<>();
+
+        // 往 HashMap 添加一些元素
+        sites.put(2, "Runoob");
+        sites.put(1, "Google");
+        sites.put(6, "Google");
+        sites.put(3, "Google");
+        sites.put(5, "Google");
+        sites.put(33, "Taobao");
+        sites.put(33, "Taao");
+        sites.put(10, "Google");
+        System.out.println("sites HashMap: " + sites);
+
+        sites.remove(5);
+        sites.remove(2);
+
+        // 返回所有 key 组成的 set 集合视图
+        System.out.println("Keys: " + sites.keySet());
+        // keySet() 返回所有 key 组成的 set 视图
+        // for-each loop 在该视图中访问每一个 key
+        for(int key: sites.keySet()) {
+
+            // 输出每个 key
+            System.out.print(key + ", ");
+        }
     }
 
     private static void test1() {
